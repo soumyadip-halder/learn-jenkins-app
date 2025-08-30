@@ -69,8 +69,8 @@ pipeline {
             steps {
                 sh '''
                  echo "Deployment stage started"
-                 sudo apt-get update
-                 sudo apt-get install -y python3
+                 apk update
+                 aapk add --no-cache python3 py3-pip
                  PYTHON_PATH = sh(script: 'which python3', returnStdout: true).trim()
                  npm config set python "${PYTHON_PATH}"
                  npm install netlify-cli@20.1.1
