@@ -1,5 +1,8 @@
 pipeline {
     agent any
+    environment {
+        PYTHON_PATH = ""
+    }
     stages {
         stage('Build') {
             agent {
@@ -66,6 +69,10 @@ pipeline {
             steps {
                 sh '''
                  echo "Deployment stage started"
+                 sudo apt-get update
+                 sudo apt-get install -y python3
+                 PYTHON_PATH = sh(script: 'which python3', returnStdout: true).trim()
+                 npm config set python "${PYTHON_PATH}"
                  npm install netlify-cli@20.1.1
                  node_modules/.bin/netlify --version
                 '''
