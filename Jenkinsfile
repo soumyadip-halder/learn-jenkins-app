@@ -72,7 +72,7 @@ pipeline {
                  echo "Deployment stage started"
                  apk update
                  apk add --no-cache python3 py3-pip
-                 PYTHON_PATH = sh(script: 'which python3', returnStdout: true).trim()
+                 PYTHON_PATH = $(which python3)
                  npm config set python "${PYTHON_PATH}"
                  npm install netlify-cli@20.1.1
                  node_modules/.bin/netlify --version
