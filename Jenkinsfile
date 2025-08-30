@@ -72,7 +72,8 @@ pipeline {
                  echo "Deployment stage started"
                  apk update
                  apk add --no-cache python3 py3-pip
-                 npm config set python "$(which python3)"
+                 export npm_config_python="$(which python3)"
+                 #npm config set python "$(which python3)"
                  npm install netlify-cli@20.1.1
                  node_modules/.bin/netlify --version
                 '''
