@@ -51,7 +51,7 @@ pipeline {
                         echo "E2E step started"
                         npm install serve
                         node_modules/.bin/serve -s build &
-                        sleep 20
+                        sleep 5
                         npx playwright install chromium
                         npx playwright test
                         '''
@@ -64,6 +64,7 @@ pipeline {
                 docker {
                     image 'node:18-alpine'
                     reuseNode true
+                    args '--user root' 
                 }
             }
             steps {
