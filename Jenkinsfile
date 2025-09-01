@@ -64,7 +64,37 @@ pipeline {
                 }
             }
         }
-        stage('Deploy') {
+        stage('Deploy to staging') {
+            agent {
+                docker {
+                    image 'node:18-alpine'
+                    reuseNode true
+                    args '--user root' 
+                }
+            }
+            steps {
+                sh '''
+                 echo "Deployment stage started"
+                 apk update
+                 apk add --no-cache python3 py3-pip
+                 export npm_config_python="$(which python3)"
+                 #npm config set python "$(which python3)"
+                 npm install netlify-cli@20.1.1
+                 node_modules/.bin/netlify --version
+                 echo "Deploying to production. Site ID: $NETLIFY_SITE_ID"
+                 node_modules/.bin/netlify status
+                 node_modules/.bin/netlify deploy --dir=build
+                '''
+            }
+        }
+        stage('Approve') {
+            steps {
+                timeout(time: 15, unit: 'MINUTES') {
+                    input message: 'Do you want to deploy to prod', ok: 'Yes I am sure'
+                }
+            }
+        }
+        stage('Deploy to prod') {
             agent {
                 docker {
                     image 'node:18-alpine'
