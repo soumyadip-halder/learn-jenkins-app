@@ -87,6 +87,25 @@ pipeline {
                 '''
             }
         }
+        stage('Prod E2E') {
+            agent {
+                docker {
+                    image 'mcr.microsoft.com/playwright:v1.55.0-noble'
+                    reuseNode true
+                    args '--user root' 
+                }
+                environment {
+                    CI_ENVIRONMENT_URL = 'https://friendly-muffin-852f81.netlify.app'
+                }
+                steps {
+                    sh '''
+                     echo "E2E production test stage starts"
+                     npx playright install chromium
+                     npx playright test
+                    '''
+                }
+            }
+        }
     }
     post {
         always {
