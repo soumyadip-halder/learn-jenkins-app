@@ -94,16 +94,16 @@ pipeline {
                     reuseNode true
                     args '--user root' 
                 }
-                environment {
-                    CI_ENVIRONMENT_URL = 'https://friendly-muffin-852f81.netlify.app'
-                }
-                steps {
-                    sh '''
-                     echo "E2E production test stage starts"
-                     npx playright install chromium
-                     npx playright test
-                    '''
-                }
+            }
+            environment {
+                CI_ENVIRONMENT_URL = 'https://friendly-muffin-852f81.netlify.app'
+            }
+            steps {
+                sh '''
+                 echo "E2E production test stage starts"
+                 npx playright install chromium
+                 npx playright test
+                '''
             }
         }
     }
