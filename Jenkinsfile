@@ -101,8 +101,8 @@ pipeline {
             steps {
                 sh '''
                  echo "E2E production test stage starts"
-                 npx playright install chromium
-                 npx playright test
+                 npx playwright install chromium
+                 npx playwright test
                 '''
             }
         }
