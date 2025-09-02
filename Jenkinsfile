@@ -7,6 +7,13 @@ pipeline {
         REACT_APP_VERSION = "1.0.$BUILD_ID"
     }
     stages {
+        stage('Docker') {
+            steps {
+                sh '''
+                 docker build -t my-playwright .
+                '''
+            }
+        }
         stage('Build') {
             agent {
                 docker {
@@ -47,16 +54,18 @@ pipeline {
                 stage('E2E') {
                     agent {
                         docker {
-                            image 'mcr.microsoft.com/playwright:v1.55.0-noble'
+                            #image 'mcr.microsoft.com/playwright:v1.55.0-noble'
+                            image 'my-playwright'
                             reuseNode true
-                            args '--user root' 
+                            #args '--user root' 
                         }
                     }
                     steps {
                         sh '''
                         echo "E2E step started"
-                        npm install serve
-                        node_modules/.bin/serve -s build &
+                        #npm install serve
+                        #node_modules/.bin/serve -s build &
+                        serve -s build &
                         sleep 5
                         npx playwright install chromium
                         npx playwright test
@@ -98,32 +107,37 @@ pipeline {
         stage('Deploy to prod') {
             agent {
                 docker {
-                    image 'node:18-alpine'
+                    #image 'node:18-alpine'
+                    image 'my-playwright'
                     reuseNode true
-                    args '--user root' 
+                    #args '--user root' 
                 }
             }
             steps {
                 sh '''
                  echo "Deployment stage started"
-                 apk update
-                 apk add --no-cache python3 py3-pip
-                 export npm_config_python="$(which python3)"
+                 #apk update
+                 #apk add --no-cache python3 py3-pip
+                 #export npm_config_python="$(which python3)"
                  #npm config set python "$(which python3)"
-                 npm install netlify-cli@20.1.1
-                 node_modules/.bin/netlify --version
+                 #npm install netlify-cli@20.1.1
+                 #node_modules/.bin/netlify --version
+                 netlify --version
                  echo "Deploying to production. Site ID: $NETLIFY_SITE_ID"
-                 node_modules/.bin/netlify status
-                 node_modules/.bin/netlify deploy --dir=build --prod
+                 #node_modules/.bin/netlify status
+                 netlify status
+                 #node_modules/.bin/netlify deploy --dir=build --prod
+                 netlify deploy --dir=build --prod
                 '''
             }
         }
         stage('Prod E2E') {
             agent {
                 docker {
-                    image 'mcr.microsoft.com/playwright:v1.55.0-noble'
+                    #image 'mcr.microsoft.com/playwright:v1.55.0-noble'
+                    image 'my-playwright'
                     reuseNode true
-                    args '--user root' 
+                    #args '--user root' 
                 }
             }
             environment {
