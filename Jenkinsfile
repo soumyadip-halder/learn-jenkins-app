@@ -16,14 +16,10 @@ pipeline {
         }
         stage('Build') {
             agent {
-                // docker {
-                //     image 'node:18-alpine'
-                //     reuseNode true
-                //     args '--user root' 
-                // }
                 docker {
-                    image 'my-playwright'
+                    image 'node:18-alpine'
                     reuseNode true
+                    args '--user root' 
                 }
             }
             steps {
