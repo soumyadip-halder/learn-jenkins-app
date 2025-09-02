@@ -16,10 +16,14 @@ pipeline {
         }
         stage('Build') {
             agent {
+                // docker {
+                //     image 'node:18-alpine'
+                //     reuseNode true
+                //     args '--user root' 
+                // }
                 docker {
-                    image 'node:18-alpine'
+                    image 'my-playwright'
                     reuseNode true
-                    args '--user root' 
                 }
             }
             steps {
@@ -27,8 +31,8 @@ pipeline {
                  echo "Started the build stage"
                  npm --version
                  node --version
-                 npm ci
-                 npm run build
+                 sudo npm ci
+                 sudo npm run build
                  ls -la
                 '''
             }
