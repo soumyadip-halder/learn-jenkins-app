@@ -31,8 +31,8 @@ pipeline {
                  echo "Started the build stage"
                  npm --version
                  node --version
-                 sudo npm ci
-                 sudo npm run build
+                 npm ci
+                 npm run build
                  ls -la
                 '''
             }

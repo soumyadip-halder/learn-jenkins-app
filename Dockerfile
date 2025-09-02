@@ -4,3 +4,4 @@ RUN apt-get install python3 python3-pip sudo -y
 RUN export npm_config_python="$(which python3)"
 RUN npm install -g netlify-cli@20.1.1 
 RUN npm install -g serve
+RUN sudo -i
