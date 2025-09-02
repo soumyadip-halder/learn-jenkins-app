@@ -53,11 +53,14 @@ pipeline {
                 }
                 stage('E2E') {
                     agent {
+                        // docker {
+                        //     image 'mcr.microsoft.com/playwright:v1.55.0-noble'
+                        //     reuseNode true
+                        //     args '--user root' 
+                        // }
                         docker {
-                            #image 'mcr.microsoft.com/playwright:v1.55.0-noble'
                             image 'my-playwright'
                             reuseNode true
-                            #args '--user root' 
                         }
                     }
                     steps {
@@ -106,11 +109,14 @@ pipeline {
         }
         stage('Deploy to prod') {
             agent {
+                // docker {
+                //     image 'node:18-alpine'
+                //     reuseNode true
+                //     args '--user root' 
+                // }
                 docker {
-                    #image 'node:18-alpine'
                     image 'my-playwright'
                     reuseNode true
-                    #args '--user root' 
                 }
             }
             steps {
@@ -133,11 +139,14 @@ pipeline {
         }
         stage('Prod E2E') {
             agent {
+                // docker {
+                //     image 'mcr.microsoft.com/playwright:v1.55.0-noble'
+                //     reuseNode true
+                //     args '--user root' 
+                // }
                 docker {
-                    #image 'mcr.microsoft.com/playwright:v1.55.0-noble'
                     image 'my-playwright'
                     reuseNode true
-                    #args '--user root' 
                 }
             }
             environment {
